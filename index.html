@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Albert Camus - The Absurd</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <style>
         /* Base and Global Styles */
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -13,6 +14,7 @@
             color: #fff;
             line-height: 1.4;
             font-weight: bold;
+            transition: background-color 0.5s, color 0.5s; /* Added for smooth transition */
         }
 
         /* Absurdist Navigation */
@@ -73,6 +75,7 @@
             color: #ff0000;
             text-shadow: 3px 3px 0px #fff;
             transform: rotate(-2deg);
+            cursor: pointer;
         }
         .hero h2 {
             font-size: 2rem;
@@ -104,8 +107,6 @@
         .section p { font-size: 1.2rem; font-weight: bold; margin-bottom: 1rem; color: #fff; }
         .highlight { background: #ff0000; color: #000; padding: 0.2rem 0.5rem; font-weight: bold; }
 
-        /* --- STYLES FOR INTERACTIVE FEATURES --- */
-
         /* General Input and Button Styles */
         input, button {
             width: 100%;
@@ -128,38 +129,44 @@
         button:hover, input[type="submit"]:hover { background: #000; color: #ff0000; }
         label { display: block; margin-bottom: 0.5rem; text-transform: uppercase; }
 
-        /* Image Slider - FIXED SIZE */
+        /* Image Slider */
         #slider {
-            /* 1. Set a fixed size and black background for the container */
             width: 100%;
-            max-width: 500px; /* Adjust max-width as needed */
-            height: 350px;     /* Adjust height as needed */
+            max-width: 500px;
+            height: 350px;
             background-color: #000;
             border: 3px solid #ff0000;
-            margin: 0 auto 1rem auto; /* Center the slider */
-
-            /* 2. Center the image inside the container */
+            margin: 0 auto 1rem auto;
             display: flex;
             justify-content: center;
             align-items: center;
         }
-        #slider img {
-            /* 3. Ensure image fits inside without stretching */
-            max-width: 100%;
-            max-height: 100%;
-            width: auto;
-            height: auto;
-        }
+        #slider img { max-width: 100%; max-height: 100%; width: auto; height: auto; }
         .slider-buttons { max-width: 500px; margin: 0 auto; display: flex; gap: 1rem; }
 
         /* Form Validation */
         .error { color: #ff0000; font-size: 1rem; font-weight: bold; margin-top: -0.5rem; margin-bottom: 1rem; }
 
         /* Mini Game */
-        #game { padding: 1rem; background: #000; border: 2px dashed #ff0000; }
+        #game {
+            padding: 1rem;
+            background: #000;
+            border: 2px dashed #ff0000;
+            transition: transform 0.3s ease-in-out, background-color 0.5s;
+        }
         #result { margin-top: 10px; font-weight: bold; font-size: 1.2rem; text-align: center; }
 
-        /* Absurd Footer */
+        /* jQuery Task Styles */
+        #workList { list-style-type: none; margin-bottom: 1rem; }
+        #workList li {
+            background: #333;
+            padding: 0.5rem;
+            border-left: 3px solid #ff0000;
+            margin-bottom: 0.5rem;
+        }
+        .button-group { display: flex; gap: 1rem; }
+
+        /* Footer */
         footer {
             background: #ff0000;
             color: #000;
@@ -170,11 +177,7 @@
         }
         footer form { max-width: 500px; margin: 2rem auto 0; }
         footer label { color: #000; }
-        footer input {
-            background: #fff;
-            color: #000;
-            border-color: #000;
-        }
+        footer input { background: #fff; color: #000; border-color: #000; }
         footer input[type="submit"] { background: #000; color: #ff0000; border-color: #000; }
         footer input[type="submit"]:hover { background: #fff; color: #000; }
         footer .error { color: #fff; background: #000; padding: 0.5rem; }
@@ -185,11 +188,35 @@
             .hero h2 { font-size: 1.5rem; }
             .section h2 { font-size: 2rem; }
             .container { padding: 1rem; }
-
-            #slider {
-                height: 250px; /* Adjust height for mobile if needed */
-            }
+            #slider { height: 250px; }
         }
+
+        /* --- STYLES FOR INVERT THEME --- */
+        body.invert-theme { background: #fff; color: #000; }
+        .invert-theme nav { background: #000; color: #fff; }
+        .invert-theme nav a { color: #fff; }
+        .invert-theme nav a:hover { background: #ff0000; color: #000; }
+        .invert-theme .hero { background: #fff; }
+        .invert-theme .hero::before { opacity: 0.15; }
+        .invert-theme .hero h1 { text-shadow: 3px 3px 0px #000; }
+        .invert-theme .hero h2 { color: #000; }
+        .invert-theme .section { background: #f0f0f0; }
+        .invert-theme .section:nth-child(even) { background: #e0e0e0; }
+        .invert-theme .section h2 { border-bottom-color: #000; }
+        .invert-theme .section p, .invert-theme #workList li, .invert-theme label { color: #000; }
+        .invert-theme #workList li { background: #ccc; }
+        .invert-theme input { background: #eee; color: #000; border: 2px solid #000; }
+        .invert-theme button, .invert-theme input[type="submit"] { background: #ff0000; color: #000; border: 2px solid #ff0000; }
+        .invert-theme button:hover, .invert-theme input[type="submit"]:hover { background: #ccc; color: #ff0000; }
+        .invert-theme #slider { background-color: #fff; border-color: #ff0000; }
+        .invert-theme #game { background: #eee; }
+        .invert-theme #result.error-msg { color: #ff0000; }
+        .invert-theme footer input { background: #ccc; color: #000; border-color: #000; }
+        .invert-theme footer input[type="submit"] { background: #000; color: #ff0000; }
+        .invert-theme footer input[type="submit"]:hover { background: #ccc; color: #000; }
+        .invert-theme footer .error { color: #fff; background: #000; }
+        .invert-theme #changeBgBtn { background: #000; color: #ff0000; border-color: #000; }
+
     </style>
 </head>
 <body>
@@ -224,11 +251,22 @@
         <p><em>"Mother died today. Or maybe yesterday; I can't be sure."</em></p>
         <p><span class="highlight">The Myth of Sisyphus (1942)</span> - Suicide vs. absurd life.</p>
         <p><em>"The struggle itself toward the heights is enough to fill a man's heart."</em></p>
+
+        <h4 style="color:#ff0000; margin-top:2rem; text-transform:uppercase;">Other Futile Works:</h4>
+        <ul id="workList">
+            <li>The Plague (1947)</li>
+        </ul>
+        <div class="button-group">
+            <button id="addItemBtn">Add Another Effort</button>
+            <button id="removeItemBtn">Erase the Last</button>
+        </div>
     </section>
 
     <section class="section" id="interactive">
         <h2>INTERACTIVE ABSURDITY</h2>
-        <div id="slider">
+        <button id="changeHeadingBtn">Shift This Heading's Meaning</button>
+
+        <div id="slider" style="margin-top:1rem;">
             <img id="slideImage" src="camus.png" alt="Image of Camus">
         </div>
         <div class="slider-buttons">
@@ -236,6 +274,12 @@
             <button onclick="nextImage()">Next</button>
         </div>
         <hr style="border-color: #ff0000; margin: 2rem 0;">
+
+        <div class="button-group" style="margin-bottom: 1rem;">
+            <button id="toggleGameBtn">Toggle Game's Existence</button>
+            <button id="changeColorBtn">Change the Void's Hue</button>
+        </div>
+
         <div id="game">
             <label for="userGuess">Guess the Absurd Number (1-10)</label>
             <input type="number" id="userGuess" min="1" max="10">
@@ -246,14 +290,16 @@
 
     <section class="section" id="absurd">
         <h2>THE ABSURD</h2>
-        <p><span class="highlight">Life is meaningless</span> - universe doesn't care about humans.</p>
+        <p id="absurdPara"><span class="highlight">Life is meaningless</span> - universe doesn't care about humans.</p>
         <p><span class="highlight">We still seek meaning</span> - this contradiction = absurd.</p>
         <p><em>"The only way to deal with an unfree world is to become so absolutely free that your very existence is an act of rebellion."</em></p>
+        <button id="toggleParaBtn">Toggle the First Truth</button>
     </section>
 </div>
 
 <footer id="contact">
     <p><strong>CAMUS DIED JANUARY 4, 1960. THE ABSURD LIVES ON.</strong></p>
+    <button id="changeBgBtn" style="max-width: 500px; margin: 1rem auto; background:#000; color:#ff0000; border-color:#000;">Invert the Void</button>
     <form onsubmit="return validateForm()">
         <label for="name">Your Name:</label>
         <input type="text" id="name">
@@ -268,75 +314,118 @@
 </footer>
 
 <script>
-    // ---------- Image Slider ----------
+    // ---------- Original Vanilla JavaScript ----------
     let images = ["camus.png", "stranger.jpg", "sysaphus.jpg"];
     let current = 0;
-
-    function showImage(index) {
-        document.getElementById("slideImage").src = images[index];
-    }
-
-    function nextImage() {
-        current = (current + 1) % images.length;
-        showImage(current);
-    }
-
-    function previousImage() {
-        current = (current - 1 + images.length) % images.length;
-        showImage(current);
-    }
-
-    // Add keyboard navigation for the slider
+    function showImage(index) { document.getElementById("slideImage").src = images[index]; }
+    function nextImage() { current = (current + 1) % images.length; showImage(current); }
+    function previousImage() { current = (current - 1 + images.length) % images.length; showImage(current); }
     document.addEventListener('keydown', function(event) {
-        if (event.key === 'ArrowRight') {
-            nextImage();
-        } else if (event.key === 'ArrowLeft') {
-            previousImage();
-        }
+        if (event.key === 'ArrowRight') { nextImage(); }
+        else if (event.key === 'ArrowLeft') { previousImage(); }
     });
-
-    // ---------- Form Validation ----------
     function validateForm() {
         let name = document.getElementById("name").value.trim();
         let email = document.getElementById("email").value.trim();
         let valid = true;
-
         document.getElementById("nameError").innerText = "";
         document.getElementById("emailError").innerText = "";
-
         if (name === "") {
             document.getElementById("nameError").innerText = "A name is required, even if it's meaningless.";
             valid = false;
         }
-
         if (email === "") {
             document.getElementById("emailError").innerText = "A message is required for the void to ignore.";
             valid = false;
         }
-
-        if(valid) {
-            alert("Your message has been accepted by the absurd.");
-        }
-
-        return false; // Prevents actual form submission
+        if(valid) { alert("Your message has been accepted by the absurd."); }
+        return false;
     }
-
-    // ---------- Mini Game ----------
     let randomNumber = Math.floor(Math.random() * 10) + 1;
-
     function checkGuess() {
         let userGuess = parseInt(document.getElementById("userGuess").value);
         let result = document.getElementById("result");
-
+        result.classList.remove('error-msg'); // Remove error class
         if (userGuess === randomNumber) {
             result.style.color = "#fff";
             result.innerText = "Correct! The universe aligned. For now.";
             randomNumber = Math.floor(Math.random() * 10) + 1;
         } else {
             result.style.color = "#ff0000";
+            result.classList.add('error-msg'); // Add error class for inverted theme
             result.innerText = "Wrong. Try again against the indifferent odds.";
         }
     }
+</script>
+
+<script>
+    $(document).ready(function(){
+
+        // Change Heading
+        $('#changeHeadingBtn').click(function(){
+            $('#interactive h2').text('Meaning is Malleable!');
+        });
+
+        // Toggle Paragraph
+        $('#toggleParaBtn').click(function(){
+            $('#absurdPara').toggle();
+        });
+
+        // Change Box Color
+        $('#changeColorBtn').click(function(){
+            let gameBox = $('#game');
+            let currentBg = gameBox.css('background-color');
+            // Check for black in different formats
+            if (currentBg === 'rgb(0, 0, 0)' || currentBg === '#000') {
+                gameBox.css('background-color', '#222');
+            } else {
+                gameBox.css('background-color', '#000');
+            }
+        });
+
+        // Add New Item
+        $('#addItemBtn').click(function(){
+            $('#workList').append('<li>Another meaningless new entry.</li>');
+        });
+
+        // Double-Click Event
+        $('#absurdPara').dblclick(function(){
+            $(this).css('color', '#ff0000');
+        });
+
+        // Hover Effect
+        $('#game').hover(
+            function(){ $(this).css('transform', 'scale(1.05) rotate(0.5deg)'); },
+            function(){ $(this).css('transform', 'scale(1) rotate(0deg)'); }
+        );
+
+        // Remove Item
+        $('#removeItemBtn').click(function(){
+            $('#workList li:last').remove();
+        });
+
+        // Toggle Box Visibility with Animation
+        $('#toggleGameBtn').click(function(){
+            $('#game').slideToggle('slow');
+        });
+
+        // Change Page Background to Inverted Theme
+        $('#changeBgBtn').click(function(){
+            $('body').toggleClass('invert-theme');
+            // Update button text to reflect state
+            if ($('body').hasClass('invert-theme')) {
+                $(this).text('Return to the Void');
+            } else {
+                $(this).text('Invert the Void');
+            }
+        });
+
+        // Alert on Click
+        $('.hero h1').click(function(){
+            alert('You clicked the heading. It changes nothing.');
+        });
+
+    });
 </script>
 
 </body>
